@@ -2,17 +2,13 @@ package libio
 
 import (
 	"context"
+	"github.com/eleztian/pipe/bytespool"
 	"golang.org/x/sync/errgroup"
 	"io"
 )
 
 type Pipe struct {
-	Pool BufferPool
-}
-
-type BufferPool interface {
-	Get(size int) []byte
-	Put([]byte) error
+	Pool bytespool.BytesPool
 }
 
 func (p *Pipe) Copy(dst io.Writer, src io.Reader) error {

@@ -1,4 +1,4 @@
-package libio
+package ladder
 
 import (
 	"errors"
@@ -25,6 +25,7 @@ type Allocator struct {
 func NewAllocator() *Allocator {
 	alloc := new(Allocator)
 	alloc.buffers = make([]sync.Pool, 17) // 1B -> 64K
+
 	for k := range alloc.buffers {
 		i := k
 		alloc.buffers[k].New = func() interface{} {
@@ -69,4 +70,15 @@ func msb(size int) byte {
 	v |= v >> 8
 	v |= v >> 16
 	return debruijinPos[(v*0x07C4ACDD)>>27]
+}
+
+// Get a []byte from pool with most appropriate cap
+func Get(size int) []byte {
+	return DefaultAllocator.Get(size)
+}
+
+// Put returns a []byte to pool for future use,
+// which the cap must be exactly 2^n
+func Put(buf []byte) error {
+	return DefaultAllocator.Put(buf)
 }

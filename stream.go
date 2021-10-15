@@ -1,12 +1,13 @@
 package libio
 
 import (
+	"github.com/eleztian/pipe/bytespool/ladder"
 	"io"
 	"time"
 )
 
 var gPipe = &Pipe{
-	Pool: DefaultAllocator,
+	Pool: ladder.DefaultAllocator,
 }
 
 type BufWithTimeout interface {
